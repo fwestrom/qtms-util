@@ -1,10 +1,23 @@
-#!/usr/bin/nodejs
+#!/usr/bin/env node
 var child_process = require('child_process');
 var fs = require('fs');
 var path = require('path');
 
 var qtmsdir = process.cwd();
-var qtmsutilDir = path.join(qtmsdir, 'qtms-util');
+var qtmsutilDir = null;
+[process.cwd(), path.join(qtmsdir, 'qtms-util')].forEach(p => {
+    if (qtmsutilDir === null) {
+        var stat = fs.statSync(path.join(p, 'qtms-util.js'));
+        if (stat.isFile()) {
+            qtmsutilDir = p;
+        }
+    }
+});
+if (!qtmsutilDir) {
+    console.error('Fatal Error: Unable to locate qtms-util.js, cannot proceed.');
+    process.exit(1);
+}
+//console.log('qtmsutilDir = %s', qtmsutilDir);
 try {
     var stat = fs.statSync(path.join(qtmsutilDir, 'node_modules'));
     stat.isDirectory()
@@ -12,6 +25,7 @@ try {
         : npmInstall(qtmsutil);
 }
 catch (error) {
+    console.warn('Warning: Unable to locate node_modules, attempting to install.\n', error);
     npmInstall(qtmsutil);
 }
 
@@ -33,10 +47,15 @@ function npmInstall(callback) {
 }
 
 function qtmsutil() {
-    if (process.argv.indexOf('dev') < 1) {
-        process.argv.splice(process.argv.findIndex(function(x) { return /helper2?(\.js)?$/.test(x); }) + 1, 0, 'dev');
+    try {
+        // if (process.argv.indexOf('dev') < 1) {
+        //     process.argv.splice(process.argv.findIndex(function(x) { return /helper2?(\.js)?$/.test(x); }) + 1, 0, 'dev');
+        // }
+        process.chdir(qtmsdir);
+        require(path.join(qtmsutilDir, 'qtms-util.js'));
     }
-
-    process.chdir(qtmsdir);
-    require('./qtms-util/qtms-util.js');
+    catch (error) {
+        console.error('Error: Failed while executing qtms-util.js.\n', error);
+        process.exit(1);
+    }
 }

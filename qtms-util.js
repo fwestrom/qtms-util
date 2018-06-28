@@ -1,4 +1,4 @@
-#!/usr/bin/nodejs
+#!/usr/bin/env node
 'use strict';
 var crutch = require('qtort-microservices').crutch;
 var path = require('path');
