@@ -1,0 +1,42 @@
+#!/usr/bin/nodejs
+var child_process = require('child_process');
+var fs = require('fs');
+var path = require('path');
+
+var qtmsdir = process.cwd();
+var qtmsutilDir = path.join(qtmsdir, 'qtms-util');
+try {
+    var stat = fs.statSync(path.join(qtmsutilDir, 'node_modules'));
+    stat.isDirectory()
+        ? qtmsutil()
+        : npmInstall(qtmsutil);
+}
+catch (error) {
+    npmInstall(qtmsutil);
+}
+
+function npmInstall(callback) {
+    process.chdir(qtmsutilDir);
+    var npm = require('npm');
+    npm.on('log', function(message) {
+        console.log(message);
+    })
+    npm.load({ loaded: false }, function(error) {
+        return error
+            ? console.error('npm.load| error:', error)
+            : npm.commands.install(function(error) {
+                return error
+                    ? console.error('npm.install| error:', error)
+                    : qtmsutil();
+            });
+    });
+}
+
+function qtmsutil() {
+    if (process.argv.indexOf('dev') < 1) {
+        process.argv.splice(process.argv.findIndex(function(x) { return /helper2?(\.js)?$/.test(x); }) + 1, 0, 'dev');
+    }
+
+    process.chdir(qtmsdir);
+    require('./qtms-util/qtms-util.js');
+}
