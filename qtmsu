@@ -7,9 +7,14 @@ var qtmsdir = process.cwd();
 var qtmsutilDir = null;
 [process.cwd(), path.join(qtmsdir, 'qtms-util')].forEach(p => {
     if (qtmsutilDir === null) {
-        var stat = fs.statSync(path.join(p, 'qtms-util.js'));
-        if (stat.isFile()) {
-            qtmsutilDir = p;
+        try {
+            var stat = fs.statSync(path.join(p, 'qtms-util.js'));
+            if (stat.isFile()) {
+                qtmsutilDir = p;
+            }
+        }
+        catch (error) {
+            // Intentionally ignoring errors while searching for module file.
         }
     }
 });
