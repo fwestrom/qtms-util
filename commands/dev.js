@@ -93,7 +93,7 @@ module.exports = function(_, child_process, fs, inject, io, logging, options, os
                     }
                     return services.concat([
                         // getServiceObj(options.supportuidir, 'support-ui'),
-                        // getServiceObj(path.join(options.projectdir, 'ext', 'nginx'), 'nginx'),
+                        getServiceObj(path.join(options.projectdir, 'ext', 'nginx'), 'nginx'),
                     ]);
                 });
 
