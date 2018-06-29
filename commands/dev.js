@@ -38,7 +38,9 @@ module.exports = function(_, child_process, fs, inject, io, logging, options, os
             .map(inject)
             .spread(dev);
 
-        function dev(build, clean, compose, deploy, pack, broker, firehose, test) {
+        // function dev(build, clean, compose, deploy, pack, broker, firehose, test) {
+        function dev(build) {
+
 
             return _.extend(function() {
                 io.out('Please specify a dev command.');
