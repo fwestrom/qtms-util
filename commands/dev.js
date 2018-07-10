@@ -39,7 +39,7 @@ module.exports = function(_, child_process, fs, inject, io, logging, options, os
             .spread(dev);
 
         // function dev(build, clean, compose, deploy, pack, broker, firehose, test) {
-        function dev(build, clean, compose) {
+        function dev(build, clean, compose, firehose) {
 
 
             return _.extend(function() {
@@ -51,7 +51,7 @@ module.exports = function(_, child_process, fs, inject, io, logging, options, os
                 // deploy: deploy,
                 // pack: pack,
                 // broker: broker,
-                // firehose: firehose,
+                firehose: firehose,
                 // 'integration-test' : test,
                 // 'npm-update-qtort': npmUpdateQtort,
             });
@@ -92,7 +92,7 @@ module.exports = function(_, child_process, fs, inject, io, logging, options, os
                         // services.push(getServiceObj(options.qsappuidir, 'qs-app-ui'));
                     }
                     return services.concat([
-                        // getServiceObj(options.supportuidir, 'support-ui'),
+                        // getServiceObj(path.join(options.projectdir, 'ext', 'wso2is'), 'wso2is'),
                         getServiceObj(path.join(options.projectdir, 'ext', 'nginx'), 'nginx'),
                     ]);
                 });

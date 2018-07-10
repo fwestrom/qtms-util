@@ -20,7 +20,7 @@ var defaults = {
     'log.levels.microservices-crutch': 'ERROR',
     'log.levels.qtort-microservices': 'ERROR',
     'log.levels.firehose': 'DEBUG',
-    concurrency: 8,
+    concurrency: 1,
 };
 
 crutch(defaults, function(_, app, fs, inject, logging, options, path, Promise, util) {

@@ -13,6 +13,7 @@ module.exports = function getApi(_, io, options, querystring, Promise, request, 
     var loginResponse = undefined;
 
     return {
+        get: httpFn('GET', ''),
         _http: function(opts) {
             opts.path = opts.path ? opts.path.replace(/^\/api/, '') : undefined;
             return httpFn(opts.method || 'GET', opts.path)(opts);
